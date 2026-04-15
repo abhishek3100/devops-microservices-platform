@@ -14,6 +14,8 @@ exports.login = async (req, res) => {
     const data = await userService.login(req.body);
     res.json(data);
   } catch (err) {
-    res.status(401).json({ error: err.message });
+    res.status(err.response?.status || 500).json({
+      error: err.response?.data || err.message
+    });
   }
 };
