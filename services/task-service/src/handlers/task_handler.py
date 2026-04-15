@@ -1,13 +1,17 @@
 import grpc
 import task_pb2, task_pb2_grpc
 from src.services import task_service
+from src.services import notification_client
 
 
 class TaskServiceServicer(task_pb2_grpc.TaskServiceServicer):
 
     def CreateTask(self, request, context):
         task = task_service.create_task(request.title)
-
+        
+        notification_client.send_notification(
+        f"New task created: {task['title']}"
+    )
         return task_pb2.CreateTaskResponse(
             task=task_pb2.Task(
                 id=task["id"],
