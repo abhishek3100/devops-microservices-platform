@@ -14,3 +14,7 @@ const PORT = process.env.USER_SERVICE_PORT || 4000;
 app.listen(PORT, () => {
   console.log(`User Service running on port ${PORT}`);
 });
+
+app.get('/api/users/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
