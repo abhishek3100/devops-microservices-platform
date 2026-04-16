@@ -1,0 +1,41 @@
+services:
+  user-service:
+    build:
+      context: ../..
+      dockerfile: services/user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "4000:4000"
+
+  task-service:
+    build:
+      context: ../..
+      dockerfile: services/task-service/Dockerfile
+    container_name: task-service
+    ports:
+      - "50051:50051"
+
+  notification-service:
+    build:
+      context: ../..
+      dockerfile: services/notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "50052:50052"
+
+  api-gateway:
+    build:
+      context: ../..
+      dockerfile: services/api-gateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - USER_SERVICE_URL=http://user-service:4000
+      - TASK_SERVICE_URL=task-service:50051
+      - PROTO_PATH=/app/proto/task.proto
+      - JWT_SECRET=supersecret
+    depends_on:
+      - user-service
+      - task-service
+      - notification-service
