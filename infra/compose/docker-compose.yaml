@@ -1,0 +1,59 @@
+services:
+
+  user-service:
+    build:
+      context: ../..
+      dockerfile: services/user-service/Dockerfile
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/api/users/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  task-service:
+    build:
+      context: ../..
+      dockerfile: services/task-service/Dockerfile
+    ports:
+      - "50051:50051"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "nc -z localhost 50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  notification-service:
+    build:
+      context: ../..
+      dockerfile: services/notification-service/Dockerfile
+    ports:
+      - "50052:50052"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "nc -z localhost 50052"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ../..
+      dockerfile: services/api-gateway/Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      user-service:
+        condition: service_healthy
+      task-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
