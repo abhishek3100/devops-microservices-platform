@@ -9,11 +9,11 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/api/users/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:4000/api/users/health"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
   task-service:
     build:
@@ -22,11 +22,11 @@ services:
     ports:
       - "50051:50051"
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "sh", "-c", "nc -z localhost 50051"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "sh", "-c", "nc -z localhost 50051"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
   notification-service:
     build:
@@ -35,11 +35,11 @@ services:
     ports:
       - "50052:50052"
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "sh", "-c", "nc -z localhost 50052"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "sh", "-c", "nc -z localhost 50052"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
   api-gateway:
     build:
@@ -50,10 +50,19 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    # depends_on:
+      # user-service:
+      #   condition: service_healthy
+      # task-service:
+      #   condition: service_healthy
+      # notification-service:
+      #   condition: service_healthy
+  
+  frontend:
+    build:
+      context: ../..
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8080:80"
     depends_on:
-      user-service:
-        condition: service_healthy
-      task-service:
-        condition: service_healthy
-      notification-service:
-        condition: service_healthy
+      - api-gateway
