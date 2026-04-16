@@ -1,0 +1,72 @@
+name: DevOps Microservices CI
+
+on:
+  push:
+    branches: [ "main", "feature/**" ]
+  pull_request:
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      api-gateway: ${{ steps.filter.outputs.api-gateway }}
+      user-service: ${{ steps.filter.outputs.user-service }}
+      task-service: ${{ steps.filter.outputs.task-service }}
+      notification-service: ${{ steps.filter.outputs.notification-service }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            api-gateway:
+              - 'services/api-gateway/**'
+              - 'proto/**'
+            user-service:
+              - 'services/user-service/**'
+            task-service:
+              - 'services/task-service/**'
+              - 'proto/**'
+            notification-service:
+              - 'services/notification-service/**'
+              - 'proto/**'
+            frontend:
+              - 'frontend/**'
+
+  build:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - name: api-gateway
+            dockerfile: services/api-gateway/Dockerfile
+          - name: user-service
+            dockerfile: services/user-service/Dockerfile
+          - name: task-service
+            dockerfile: services/task-service/Dockerfile
+          - name: notification-service
+            dockerfile: services/notification-service/Dockerfile
+          - name: frontend
+            dockerfile: frontend/Dockerfile
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Build Service
+        if: needs.detect-changes.outputs[matrix.service.name] == 'true'
+        run: |
+          docker build \
+            -f ${{ matrix.service.dockerfile }} \
+            -t ${{ matrix.service.name }}:${TAG} .
