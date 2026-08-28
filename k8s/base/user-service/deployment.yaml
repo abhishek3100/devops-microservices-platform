@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: ghcr.io/abhishek3100/devops-microservices-platform/user-service:903b693
+          image: ghcr.io/abhishek3100/devops-microservices-platform/user-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
