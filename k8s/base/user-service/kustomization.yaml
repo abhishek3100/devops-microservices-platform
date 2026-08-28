@@ -4,3 +4,8 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
+
+images:
+  - name: user-service
+    newName: ghcr.io/abhishek3100/devops-microservices-platform/user-service
+    newTag: latest

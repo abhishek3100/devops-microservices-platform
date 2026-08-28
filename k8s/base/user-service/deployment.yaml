@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: user-service:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/abhishek3100/devops-microservices-platform/user-service:903b693
+          imagePullPolicy: Always
           ports:
             - containerPort: 4000
           envFrom:
@@ -38,15 +38,15 @@ spec:
               memory: "256Mi"
           livenessProbe:
             httpGet:
-              path: /health
+              path: /api/users/health
               port: 4000
-            initialDelaySeconds: 20
+            initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /health
+              path: /api/users/health
               port: 4000
-            initialDelaySeconds: 5
+            initialDelaySeconds: 3
             periodSeconds: 5
           securityContext:
             allowPrivilegeEscalation: false

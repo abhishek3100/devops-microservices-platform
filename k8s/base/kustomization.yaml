@@ -7,7 +7,7 @@ resources:
   # - api-gateway
   - user-service
   # - task-service
-  # - notification-service
+  - notification-service
   # - frontend
   # - gateway
   # - monitoring
