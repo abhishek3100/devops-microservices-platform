@@ -1,41 +1,58 @@
-# Local Kubernetes Setup
+# Local Development Setup
 
-This document describes how to bootstrap the local development Kubernetes cluster used by the **DevOps Microservices Platform**.
+This guide explains how to run the DevOps Microservices Platform locally using Docker Desktop Kubernetes.
 
-## Prerequisites
+---
 
-- Docker Desktop (Kubernetes enabled)
+# Prerequisites
+
+- Docker Desktop
+- Kubernetes enabled in Docker Desktop
 - kubectl
 - Helm
-- Git
-- Docker CLI
+- Node.js 22+
+- Python 3.11+
+- Make
 
-Verify the cluster:
+Verify:
 
 ```bash
-kubectl cluster-info
-kubectl get nodes
-```
-
-Expected:
-
-```
-NAME                    STATUS   ROLES
-desktop-control-plane   Ready    control-plane
-desktop-worker          Ready
+docker --version
+kubectl version
+helm version
+node -v
+python --version
 ```
 
 ---
 
-# 1. Enable Kubernetes
+# Clone Repository
 
-Enable Kubernetes from Docker Desktop:
+```bash
+git clone <repo-url>
 
+cd devops-microservices-platform
 ```
-Settings
-→ Kubernetes
-→ Enable Kubernetes
+
+---
+
+# Build Docker Images
+
+Build all services locally.
+
+```bash
+docker build -f services/api-gateway/Dockerfile -t api-gateway:latest .
+docker build -f services/user-service/Dockerfile -t user-service:latest .
+docker build -f services/task-service/Dockerfile -t task-service:latest .
+docker build -f services/notification-service/Dockerfile -t notification-service:latest .
+docker build -f frontend/Dockerfile -t frontend:latest .
 ```
+
+---
+
+# Create Kubernetes Cluster
+
+Enable Kubernetes from Docker Desktop.
 
 Verify:
 
@@ -43,99 +60,91 @@ Verify:
 kubectl get nodes
 ```
 
----
+Expected:
 
-# 2. Install Metrics Server
-
-Metrics Server provides CPU and memory metrics required by:
-
-- `kubectl top`
-- Horizontal Pod Autoscaler (HPA)
-
-Install:
-
-```bash
-kubectl apply -f \
-https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+control-plane
+worker
 ```
 
-Patch for Docker Desktop:
+---
+
+# Install Metrics Server
 
 ```bash
-kubectl patch deployment metrics-server \
-  -n kube-system \
-  --type='json' \
-  -p='[
-    {
-      "op":"add",
-      "path":"/spec/template/spec/containers/0/args/-",
-      "value":"--kubelet-insecure-tls"
-    }
-  ]'
+helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server
+
+helm repo update
+
+helm install metrics-server metrics-server/metrics-server \
+  --namespace kube-system \
+  --set args="{--kubelet-insecure-tls}"
 ```
 
 Verify:
 
 ```bash
 kubectl top nodes
-kubectl top pods -A
 ```
 
 ---
 
-# 3. Install Gateway API CRDs
+# Install Envoy Gateway
+
+Install Gateway API implementation.
 
 ```bash
-kubectl apply -f \
-https://github.com/kubernetes-sigs/gateway-api/releases/latest/download/standard-install.yaml
+helm install eg oci://docker.io/envoyproxy/gateway-helm \
+  --version v1.9.1 \
+  -n envoy-gateway-system \
+  --create-namespace
 ```
 
-Verify:
+Install Gateway API CRDs.
 
 ```bash
-kubectl get crd | grep gateway
-```
-
----
-
-# 4. Install Envoy Gateway
-
-Add the Helm repository:
-
-```bash
-helm install eg \
-oci://docker.io/envoyproxy/gateway-helm \
---version v1.9.1 \
--n envoy-gateway-system \
---create-namespace
-```
-
-Install the quickstart resources:
-
-```bash
-kubectl apply -f \
-https://github.com/envoyproxy/gateway/releases/download/v1.9.1/quickstart.yaml
+kubectl apply \
+-f https://github.com/envoyproxy/gateway/releases/download/v1.9.1/quickstart.yaml
 ```
 
 Verify:
 
 ```bash
 kubectl get gatewayclass
-kubectl get gateway -A
-```
-
-Expected:
-
-```
-NAME
-eg
 ```
 
 ---
 
-# 5. Deploy Platform
+# Install Prometheus
 
-Deploy the application:
+```bash
+helm repo add prometheus-community \
+https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm install prometheus prometheus-community/prometheus \
+  -n monitoring \
+  --create-namespace
+```
+
+Upgrade using project values:
+
+```bash
+helm upgrade prometheus prometheus-community/prometheus \
+  -n monitoring \
+  -f k8s/base/monitoring/prometheus/values.yaml
+```
+
+Verify:
+
+```bash
+kubectl get pods -n monitoring
+```
+
+---
+
+# Deploy Application
 
 ```bash
 kubectl apply -k k8s/overlays/local
@@ -145,40 +154,65 @@ Verify:
 
 ```bash
 kubectl get pods -n devops-platform
-```
-
----
-
-# 6. Verify Gateway
-
-```bash
+kubectl get svc -n devops-platform
 kubectl get gateway -n devops-platform
 ```
 
-Expected:
-
-```
-NAME               CLASS   PROGRAMMED
-platform-gateway   eg      True
-```
-
-Check routes:
-
-```bash
-kubectl get httproute -n devops-platform
-```
+All pods should be Running.
 
 ---
 
-# 7. Access the Application
+# Access Frontend
 
-Docker Desktop exposes the Envoy Gateway through localhost.
+Port-forward Envoy:
+
+```bash
+kubectl port-forward -n envoy-gateway-system \
+service/envoy 8080:80
+```
 
 Open:
 
+http://localhost:8080
+
+---
+
+# Prometheus
+
+Port-forward:
+
+```bash
+kubectl port-forward svc/prometheus-server \
+9090:80 \
+-n monitoring
 ```
-http://localhost
-```
+
+Open:
+
+http://localhost:9090
+
+Verify:
+
+Status → Targets
+
+Expected targets:
+
+- api-gateway
+- user-service
+- task-service
+- notification-service
+
+---
+
+# Metrics
+
+Node Services
+
+http://localhost:3000/metrics
+
+Python Services
+
+http://localhost:8000/metrics
 
 ---
 
@@ -187,90 +221,44 @@ http://localhost
 Pods
 
 ```bash
-kubectl get pods -n devops-platform
-```
-
-Services
-
-```bash
-kubectl get svc -n devops-platform
-```
-
-Gateway
-
-```bash
-kubectl get gateway -n devops-platform
-kubectl describe gateway platform-gateway -n devops-platform
-```
-
-Routes
-
-```bash
-kubectl get httproute -n devops-platform
-kubectl describe httproute api-route -n devops-platform
-```
-
-Metrics
-
-```bash
-kubectl top nodes
-kubectl top pods -n devops-platform
+kubectl get pods -A
 ```
 
 Logs
 
 ```bash
-kubectl logs -f deployment/api-gateway -n devops-platform
+kubectl logs -f <pod> -n devops-platform
+```
+
+Describe
+
+```bash
+kubectl describe pod <pod> -n devops-platform
+```
+
+Restart Deployment
+
+```bash
+kubectl rollout restart deployment/api-gateway \
+-n devops-platform
+```
+
+Delete Cluster Resources
+
+```bash
+kubectl delete -k k8s/overlays/local
 ```
 
 ---
 
-# Troubleshooting
+# Current Platform
 
-## Gateway has no address
-
-Check:
-
-```bash
-kubectl describe gateway platform-gateway -n devops-platform
-```
-
-Look for:
-
-```
-Programmed=True
-```
-
----
-
-## Pods not starting
-
-```bash
-kubectl describe pod <pod-name> -n devops-platform
-```
-
----
-
-## Images cannot be pulled
-
-Verify:
-
-- Image exists in GitHub Container Registry
-- `imagePullSecrets` configured (if required)
-- Image tag is correct
-
----
-
-## Metrics unavailable
-
-Restart Metrics Server:
-
-```bash
-kubectl rollout restart deployment metrics-server -n kube-system
-```
-
-Verify:
-
-```bash
-kubectl top nodes
-```
+- API Gateway (Node.js)
+- User Service (Node.js)
+- Task Service (Python gRPC)
+- Notification Service (Python gRPC)
+- PostgreSQL
+- Gateway API (Envoy)
+- Prometheus
+- Metrics Server
+- Kubernetes

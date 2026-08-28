@@ -1,4 +1,4 @@
-.PHONY: run-user run-task run-notification run-gateway up down build clean
+.PHONY: run-user run-task run-notification run-gateway up down build k8s-up k8s-down prometheus-install  gateway-install clean 
 
 # Run individual services
 
@@ -34,6 +34,23 @@ down:
 build:
 	docker-compose -f infra/compose/docker-compose.yaml build
 
+k8s-up:
+	kubectl apply -k k8s/overlays/local
+
+k8s-down:
+	kubectl delete -k k8s/overlays/local
+
+prometheus-install:
+	helm upgrade --install prometheus prometheus-community/prometheus \
+		-n monitoring \
+		--create-namespace \
+		-f k8s/base/monitoring/prometheus/values.yaml
+
+gateway-install:
+	helm upgrade --install eg oci://docker.io/envoyproxy/gateway-helm \
+		--version v1.9.1 \
+		-n envoy-gateway-system \
+		--create-namespace
 
 # Cleanup
 clean:
