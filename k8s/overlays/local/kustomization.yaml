@@ -9,8 +9,3 @@ namespace: devops-platform
 labels:
   - pairs:
       environment: local
-
-images:
-  - name: notification-service
-    newName: ghcr.io/abhishek3100/devops-microservices-platform/notification-service
-    newTag: latest

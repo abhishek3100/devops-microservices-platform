@@ -16,6 +16,13 @@ app.use(morgan('dev'));
 
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "UP",
+    service: "api-gateway",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 

@@ -4,10 +4,10 @@ kind: Kustomization
 resources:
   - namespaces
   - config
-  # - api-gateway
+  - api-gateway
   - user-service
-  # - task-service
+  - task-service
   - notification-service
-  # - frontend
+  - frontend
   # - gateway
   # - monitoring
