@@ -2,8 +2,9 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const path = require('path');
 
-const PROTO_PATH = process.env.PROTO_PATH || 
-  path.join(process.cwd(), 'proto/task.proto');
+const PROTO_PATH =
+  process.env.PROTO_PATH ||
+  path.resolve(__dirname, '../../../../proto/task.proto');
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
 const taskProto = grpc.loadPackageDefinition(packageDefinition).task;

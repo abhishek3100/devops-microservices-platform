@@ -5,6 +5,8 @@ require('dotenv').config();
 const userRoutes = require('./routes/user.routes');
 
 const app = express();
+const metricsMiddleware = require("./middleware/metrics");
+app.use(metricsMiddleware);
 
 app.use(bodyParser.json());
 app.use('/api/users', userRoutes);
@@ -17,6 +19,12 @@ app.get("/health", (req, res) => {
     service: "user-service",
     timestamp: new Date().toISOString(),
   });
+});
+const { register } = require("./metrics/metrics");
+
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", register.contentType);
+  res.end(await register.metrics());
 });
 
 app.listen(PORT, () => {

@@ -7,6 +7,7 @@ from grpc_reflection.v1alpha import reflection
 from grpc_health.v1 import health
 from grpc_health.v1 import health_pb2
 from grpc_health.v1 import health_pb2_grpc
+from src.metrics import start_metrics_server
 
 
 def serve():
@@ -39,6 +40,7 @@ def serve():
     )
 
     server.start()
+    start_metrics_server()
     server.wait_for_termination()
 
 

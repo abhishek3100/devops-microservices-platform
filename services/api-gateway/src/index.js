@@ -12,6 +12,8 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
+const metricsMiddleware = require("./middleware/metrics");
+app.use(metricsMiddleware);
 app.use(morgan('dev'));
 
 app.use('/api/users', userRoutes);
@@ -22,6 +24,12 @@ app.get("/health", (req, res) => {
     service: "api-gateway",
     timestamp: new Date().toISOString(),
   });
+});
+const { register } = require("./metrics/metrics");
+
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", register.contentType);
+  res.end(await register.metrics());
 });
 
 const PORT = process.env.PORT || 3000;
