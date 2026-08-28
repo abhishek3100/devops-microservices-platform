@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/abhishek3100/devops-microservices-platform/frontend:latest
+          image: ghcr.io/abhishek3100/devops-microservices-platform/frontend:903b693
           imagePullPolicy: Always
           ports:
             - containerPort: 80

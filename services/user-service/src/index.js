@@ -15,6 +15,10 @@ app.listen(PORT, () => {
   console.log(`User Service running on port ${PORT}`);
 });
 
-app.get('/api/users/health', (req, res) => {
-  res.status(200).json({ status: 'OK' });
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "UP",
+    service: "user-service",
+    timestamp: new Date().toISOString(),
+  });
 });
