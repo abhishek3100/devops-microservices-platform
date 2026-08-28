@@ -4,6 +4,11 @@ on:
   push:
     branches: [ "main", "feature/**" ]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   detect-changes:
@@ -64,9 +69,18 @@ jobs:
       - name: Set image tag
         run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: Build Service
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Service Image
         if: needs.detect-changes.outputs[matrix.service.name] == 'true'
-        run: |
-          docker build \
-            -f ${{ matrix.service.dockerfile }} \
-            -t ${{ matrix.service.name }}:${TAG} .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.service.dockerfile }}
+          push: true
+          tags: ghcr.io/${{ github.repository }}/${{ matrix.service.name }}:${{ env.TAG }}

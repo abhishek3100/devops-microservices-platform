@@ -26,13 +26,13 @@ run-all:
 
 # Docker (Phase 2 ready)
 up:
-	docker-compose up --build
+	docker-compose -f infra/compose/docker-compose.yaml up --build
 
 down:
-	docker-compose down
+	docker-compose -f infra/compose/docker-compose.yaml down
 
 build:
-	docker-compose build
+	docker-compose -f infra/compose/docker-compose.yaml build
 
 
 # Cleanup
