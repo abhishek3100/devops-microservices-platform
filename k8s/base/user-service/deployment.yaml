@@ -24,6 +24,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
+            - containerPort: 8000
           envFrom:
             - configMapRef:
                 name: platform-config

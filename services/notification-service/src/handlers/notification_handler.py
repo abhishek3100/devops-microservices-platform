@@ -1,18 +1,42 @@
 import notification_pb2
 import notification_pb2_grpc
 
+from time import perf_counter
+
 from src.services import notification_service
-from src.metrics import GRPC_REQUEST_COUNT
+from src.metrics import (
+    grpc_requests_total,
+    grpc_request_duration_seconds,
+)
 
 
 class NotificationServiceServicer(
     notification_pb2_grpc.NotificationServiceServicer
 ):
 
-    @GRPC_REQUEST_COUNT.labels(method="SendNotification").count_exceptions()
     def SendNotification(self, request, context):
-        status = notification_service.send_notification(request.message)
+        start = perf_counter()
 
-        return notification_pb2.NotificationResponse(
-            status=status
-        )
+        try:
+            status = notification_service.send_notification(request.message)
+
+            grpc_requests_total.labels(
+                method="SendNotification",
+                status="success"
+            ).inc()
+
+            return notification_pb2.NotificationResponse(
+                status=status
+            )
+
+        except Exception:
+            grpc_requests_total.labels(
+                method="SendNotification",
+                status="error"
+            ).inc()
+            raise
+
+        finally:
+            grpc_request_duration_seconds.labels(
+                method="SendNotification"
+            ).observe(perf_counter() - start)

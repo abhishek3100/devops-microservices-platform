@@ -11,3 +11,6 @@ spec:
       port: 50051
       targetPort: 50051
       protocol: TCP
+    - name: metrics
+      port: 8000
+      targetPort: 8000

@@ -24,6 +24,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          env:
+          - name: PROTO_PATH
+            value: /app/proto/task.proto
           envFrom:
             - configMapRef:
                 name: platform-config
