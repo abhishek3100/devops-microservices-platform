@@ -47,12 +47,13 @@ devops-microservices-platform/
 │   └── notification-service/
 │
 ├── proto/                 # Shared gRPC contracts
-├── frontend/              # (To be implemented)
-├── infra/                 # Terraform, Docker (later phases)
-├── docs/                  # Architecture & design docs
+├── frontend/              # React/Vite frontend
+├── infra/compose/         # Docker Compose deployment
+├── k8s/                   # Kubernetes manifests and overlays
+├── terraform/             # Terraform infrastructure modules
+├── .github/workflows/     # CI and GHCR publishing
 │
 ├── README.md
-├── .env.example
 └── Makefile
 ```
 
@@ -77,6 +78,7 @@ devops-microservices-platform/
 
 * `POST /api/users/register`
 * `POST /api/users/login`
+* `GET /api/users/profile` (Protected)
 
 ---
 
@@ -84,6 +86,7 @@ devops-microservices-platform/
 
 * `POST /api/tasks` (Protected)
 * `GET /api/tasks` (Protected)
+* `GET /health`
 
 ---
 
@@ -127,7 +130,6 @@ devops-microservices-platform/
 * In-memory data storage (no persistence yet)
 * No retries or circuit breaking
 * No async messaging (planned)
-* No containerization yet
 
 ---
 
@@ -187,7 +189,26 @@ devops-microservices-platform/
 
 ---
 
-## 🧪 How to Run (Phase 1)
+## 🧪 How to Run Locally
+
+### Docker Compose
+
+```bash
+make up
+```
+
+The frontend is available at `http://localhost:8080` and the API gateway at
+`http://localhost:3000`.
+
+### Kubernetes
+
+See [k8s/README.md](k8s/README.md) for local cluster and Envoy Gateway setup.
+
+```bash
+kubectl apply -k k8s/overlays/local
+```
+
+### Manual Services (Phase 1)
 
 ### Start Services
 
