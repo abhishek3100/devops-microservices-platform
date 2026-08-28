@@ -133,37 +133,49 @@ devops-microservices-platform/
 
 ## 🗺️ Roadmap
 
-### ✅ Phase 1: Microservices Design & Implementation (Completed)
+## Project Status
 
-### ✅ Phase 2: Containerization (Completed)
+### ✅ Phase 1 — Microservices Architecture
+- [x] Frontend
+- [x] API Gateway
+- [x] User Service (REST)
+- [x] Task Service (gRPC)
+- [x] Notification Service (gRPC)
 
-* Dockerize all services
-* Docker Compose setup
+### ✅ Phase 2 — Containerization
+- [x] Multi-stage Dockerfiles
+- [x] Docker Compose
+- [x] Non-root containers
 
-### 🔜 Phase 3: CI/CD
+### ✅ Phase 3 — CI
+- [x] GitHub Actions
+- [x] Path-based builds
+- [x] GHCR image publishing
 
-* GitHub Actions pipelines
+### ✅ Phase 4 — Kubernetes
+- [x] Kustomize
+- [x] ConfigMaps & Secrets
+- [x] Health Probes
+- [x] Gateway API
+- [x] Envoy Gateway
 
-### 🔜 Phase 4: Infrastructure as Code
+### 🚧 Phase 5 — Observability
+- [ ] Prometheus
+- [ ] Grafana
+- [ ] Metrics
 
-* Terraform (GCP)
+### 🚧 Phase 6 — Autoscaling
+- [ ] HPA
+- [ ] Load Testing
 
-### 🔜 Phase 5: Kubernetes Deployment
+### 🚧 Phase 7 — GitOps
+- [ ] ArgoCD
+- [ ] Automated Deployments
 
-* Deploy on GKE
-
-### 🔜 Phase 6: Observability
-
-* Prometheus + Grafana
-
-### 🔜 Phase 7: Load Testing
-
-* k6 integration
-
-### 🔜 Phase 8: GitOps
-
-* ArgoCD
-
+### 🚧 Phase 8 — Security
+- [ ] Network Policies
+- [ ] RBAC
+- [ ] Pod Security
 ---
 
 ## 🧠 Design Decisions

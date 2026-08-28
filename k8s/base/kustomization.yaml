@@ -9,5 +9,5 @@ resources:
   - task-service
   - notification-service
   - frontend
-  # - gateway
+  - gateway
   # - monitoring
