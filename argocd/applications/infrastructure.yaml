@@ -6,7 +6,7 @@ metadata:
 spec:
   project: platform
   source:
-    repoURL: https://github.com/<YOUR_USERNAME>/devops-microservices-platform.git
+    repoURL: https://github.com/abhishek3100/devops-microservices-platform.git
     targetRevision: main
     path: k8s/base/gateway
   destination:
