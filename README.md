@@ -4,37 +4,6 @@ A production-grade DevOps project demonstrating end-to-end implementation of a m
 
 ---
 
-## Architecture
-
-```
-                Internet
-                     │
-               Envoy Gateway
-                     │
-              API Gateway (Node)
-             ┌────────┴────────┐
-             │                 │
-      User Service      Task Service (gRPC)
-                               │
-                               ▼
-                   Notification Service (gRPC)
-
-                PostgreSQL Database
-```
-
-### Platform Components
-
-- Kubernetes
-- Gateway API (Envoy)
-- Docker
-- Prometheus
-- Metrics Server
-- GitHub Actions
-- Kustomize
-- Helm
-
----
-
 ## 🚀 Project Overview
 
 This project simulates a real-world microservices system with:
@@ -63,6 +32,36 @@ Frontend → API Gateway → Backend Services
 * API Gateway → User Service (REST)
 * API Gateway → Task Service (gRPC)
 * Task Service → Notification Service (gRPC)
+
+```
+                Internet
+                     │
+               Envoy Gateway
+                     │
+              API Gateway (Node)
+             ┌────────┴────────┐
+             │                 │
+      User Service      Task Service (gRPC)
+                               │
+                               ▼
+                   Notification Service (gRPC)
+
+                PostgreSQL Database
+```
+
+---
+
+
+### Platform Components
+
+- Kubernetes
+- Gateway API (Envoy)
+- Docker
+- Prometheus
+- Metrics Server
+- GitHub Actions
+- Kustomize
+- Helm
 
 ---
 
