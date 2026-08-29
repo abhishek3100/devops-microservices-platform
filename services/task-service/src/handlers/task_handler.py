@@ -7,6 +7,8 @@ import task_pb2_grpc
 from src.services import task_service
 from src.services import notification_client
 
+from src.metrics_wrapper import track_grpc_metrics
+
 from src.metrics import (
     grpc_requests_total,
     grpc_request_duration_seconds,
@@ -14,9 +16,11 @@ from src.metrics import (
 
 
 class TaskServiceServicer(task_pb2_grpc.TaskServiceServicer):
+    @track_grpc_metrics("CreateTask")
 
     def CreateTask(self, request, context):
         start = perf_counter()
+        
 
         try:
             task = task_service.create_task(request.title)
@@ -49,7 +53,7 @@ class TaskServiceServicer(task_pb2_grpc.TaskServiceServicer):
             grpc_request_duration_seconds.labels(
                 method="CreateTask"
             ).observe(perf_counter() - start)
-
+    @track_grpc_metrics("GetTasks")
     def GetTasks(self, request, context):
         start = perf_counter()
 

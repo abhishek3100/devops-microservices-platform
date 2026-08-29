@@ -2,6 +2,7 @@ import notification_pb2
 import notification_pb2_grpc
 
 from time import perf_counter
+from src.metrics_wrapper import track_grpc_metrics
 
 from src.services import notification_service
 from src.metrics import (
@@ -13,7 +14,7 @@ from src.metrics import (
 class NotificationServiceServicer(
     notification_pb2_grpc.NotificationServiceServicer
 ):
-
+    @track_grpc_metrics("SendNotification")
     def SendNotification(self, request, context):
         start = perf_counter()
 
