@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: devops-dev
+resources:
+  - ../../base
+
+labels:
+  - pairs:
+      environment: dev
+
+replicas:
+  - name: api-gateway
+    count: 1
+  - name: user-service
+    count: 1
+  - name: task-service
+    count: 1
+  - name: notification-service
+    count: 1
+  - name: frontend
+    count: 1

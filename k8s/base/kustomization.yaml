@@ -10,4 +10,4 @@ resources:
   - notification-service
   - frontend
   - gateway
-  - monitoring
+  # - monitoring

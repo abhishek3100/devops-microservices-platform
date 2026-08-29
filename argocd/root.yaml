@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/abhishek3100/devops-microservices-platform.git
     targetRevision: main
-    path: argocd/applications
+    path: argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
