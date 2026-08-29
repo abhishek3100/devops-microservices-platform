@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+
+metadata:
+  name: platform
+  namespace: argocd
+
+spec:
+  description: DevOps Microservices Platform
+
+  sourceRepos:
+    - "https://github.com/abhishek3100/devops-microservices-platform.git"
+
+  destinations:
+    - namespace: devops-platform
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
