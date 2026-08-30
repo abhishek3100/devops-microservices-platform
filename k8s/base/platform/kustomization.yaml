@@ -6,3 +6,4 @@ resources:
   - task-service
   - notification-service
   - frontend
+  - config
