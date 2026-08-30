@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/abhishek3100/devops-microservices-platform.git
     targetRevision: main
-    path: k8s/base/gateway
+    path: k8s/base/infrastructure
   destination:
     server: https://kubernetes.default.svc
     namespace: devops-platform
