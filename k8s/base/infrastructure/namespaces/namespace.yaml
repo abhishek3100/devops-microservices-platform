@@ -1,5 +1,10 @@
 apiVersion: v1
 kind: Namespace
-
 metadata:
   name: devops-platform
+  
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-dev
