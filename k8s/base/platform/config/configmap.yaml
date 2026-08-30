@@ -3,6 +3,8 @@
   metadata:
     name: platform-config
     namespace: devops-platform
+    annotations:
+      argocd.argoproj.io/sync-wave: "0"
   data:
     USER_SERVICE_URL: "http://user-service:4000"
     TASK_SERVICE_HOST: "task-service"
