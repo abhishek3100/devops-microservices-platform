@@ -14,6 +14,9 @@ spec:
   destinations:
     - namespace: devops-platform
       server: https://kubernetes.default.svc
+    
+    - namespace: devops-dev
+      server: https://kubernetes.default.svc
       
     - namespace: monitoring
       server: https://kubernetes.default.svc
