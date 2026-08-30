@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: devops-dev
 resources:
   - ../../base
+  - httproute.yaml
 
 labels:
   - pairs:
