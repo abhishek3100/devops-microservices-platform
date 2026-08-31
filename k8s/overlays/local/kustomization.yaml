@@ -8,3 +8,18 @@ namespace: devops-platform
 labels:
   - pairs:
       environment: local
+images:
+- name: ghcr.io/abhishek3100/devops-microservices-platform/api-gateway
+  newTag: latest
+
+- name: ghcr.io/abhishek3100/devops-microservices-platform/user-service
+  newTag: latest
+
+- name: ghcr.io/abhishek3100/devops-microservices-platform/task-service
+  newTag: latest
+
+- name: ghcr.io/abhishek3100/devops-microservices-platform/notification-service
+  newTag: latest
+
+- name: ghcr.io/abhishek3100/devops-microservices-platform/frontend
+  newTag: latest
