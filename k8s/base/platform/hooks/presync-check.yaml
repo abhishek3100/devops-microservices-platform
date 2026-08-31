@@ -18,4 +18,4 @@ spec:
             - sh
             - -c
             - |
-              kubectl get configmap platform-config -n devops-platform
+              kubectl get configmap platform-config
