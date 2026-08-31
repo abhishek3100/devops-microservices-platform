@@ -3,6 +3,8 @@ kind: Role
 metadata:
   name: hook-runner
   namespace: devops-platform
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 rules:
 - apiGroups: [""]
   resources:
