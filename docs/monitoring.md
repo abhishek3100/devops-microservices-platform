@@ -1,6 +1,6 @@
 # Monitoring & Observability
 
-This project includes a complete monitoring stack for Kubernetes using Prometheus, Grafana, Loki and Promtail.
+This project currently uses a focused monitoring stack for Kubernetes based on **Prometheus** and **Grafana**. The services expose application metrics on `/metrics` and the Python gRPC services expose metrics on port `8000`.
 
 ---
 
@@ -8,22 +8,19 @@ This project includes a complete monitoring stack for Kubernetes using Prometheu
 
 ```
                     +----------------+
-                    |   Grafana      |
-                    +-------+--------+
-                            |
-            +---------------+----------------+
-            |                                |
-     +------+-------+                +-------+------+
-     | Prometheus   |                |    Loki      |
-     +------+-------+                +-------+------+
-            |                                ^
-            |                                |
-            |                         +------+------+
-            |                         |  Promtail   |
-            |                         +------+------+
-            |                                |
-            +--------------------------------+
-                           Kubernetes
+                    |    Grafana     |
+                    +--------+-------+
+                             |
+                    +--------v-------+
+                    |  Prometheus    |
+                    +--------+-------+
+                             |
+                  +----------+-----------+
+                  |                      |
+          API Gateway / User Service   Task Service / Notification Service
+             /metrics /metrics          /metrics (port 8000)
+                  |                      |
+                  +----------- Kubernetes -----------+
 ```
 
 ---
@@ -33,10 +30,9 @@ This project includes a complete monitoring stack for Kubernetes using Prometheu
 | Component | Purpose |
 |-----------|---------|
 | Metrics Server | Kubernetes resource metrics (CPU/Memory) |
-| Prometheus | Metrics collection and storage |
+| Prometheus | Metrics collection and alerting data |
 | Grafana | Dashboards and visualization |
-| Loki | Centralized log storage |
-| Promtail | Collects Kubernetes logs and sends them to Loki |
+| Application metrics | HTTP and gRPC metrics from service code |
 
 ---
 
@@ -104,37 +100,7 @@ Username: admin
 Password: admin123
 ```
 
----
-
-# Install Loki
-
-```bash
-helm install loki grafana/loki \
-  -n monitoring \
-  -f k8s/base/monitoring/loki/values.yaml
-```
-
-Verify:
-
-```bash
-kubectl get pods -n monitoring
-```
-
----
-
-# Install Promtail
-
-```bash
-helm install promtail grafana/promtail \
-  -n monitoring \
-  -f k8s/base/monitoring/promtail/values.yaml
-```
-
-Verify:
-
-```bash
-kubectl get daemonset -n monitoring
-```
+The repository config already wires Grafana to Prometheus as the default datasource and loads the dashboard definitions from `k8s/base/monitoring/grafana/dashboards/`.
 
 ---
 
@@ -148,15 +114,7 @@ Datasource URL
 http://prometheus-server.monitoring.svc.cluster.local
 ```
 
----
-
-## Loki
-
-Datasource URL
-
-```
-http://loki.monitoring.svc.cluster.local:3100
-```
+The current config is defined in `k8s/base/monitoring/grafana/values.yaml`.
 
 ---
 
@@ -164,10 +122,10 @@ http://loki.monitoring.svc.cluster.local:3100
 
 The following metrics are exposed:
 
-## API Gateway
+## API Gateway / User Service
 
-- HTTP Requests
-- Request Duration
+- HTTP Requests Total
+- HTTP Request Duration
 - Process CPU
 - Process Memory
 
@@ -177,24 +135,7 @@ Endpoint
 /metrics
 ```
 
----
-
-## User Service
-
-- HTTP Requests
-- Request Duration
-- CPU
-- Memory
-
-Endpoint
-
-```
-/metrics
-```
-
----
-
-## Task Service
+## Task Service / Notification Service
 
 - gRPC Request Count
 - gRPC Request Duration
@@ -207,17 +148,20 @@ Metrics Port
 
 ---
 
-## Notification Service
+# Included Dashboards
 
-- gRPC Request Count
-- gRPC Request Duration
+The project currently includes these Grafana dashboards:
 
-Metrics Port
+- Platform Overview
+- API Gateway Overview
+- Service Overview
+- Kubernetes Cluster Overview
 
+They are stored under:
+
+```bash
+k8s/base/monitoring/grafana/dashboards/
 ```
-8000
-```
-
 ---
 
 # View Metrics

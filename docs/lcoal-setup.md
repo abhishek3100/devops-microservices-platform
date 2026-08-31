@@ -1,6 +1,6 @@
 # Local Development Setup
 
-This guide explains how to run the DevOps Microservices Platform locally using Docker Desktop Kubernetes.
+This guide explains how to run the DevOps Microservices Platform locally using Docker Desktop Kubernetes, Docker Compose, and the repo's Kustomize/Helm automation.
 
 ---
 
@@ -24,6 +24,16 @@ node -v
 python --version
 ```
 
+The repo also includes a few helper commands in the root Makefile:
+
+```bash
+make up
+make down
+make k8s-up
+make k8s-down
+make prometheus-install
+make gateway-install
+```
 ---
 
 # Clone Repository
@@ -118,21 +128,15 @@ kubectl get gatewayclass
 # Install Prometheus
 
 ```bash
-helm repo add prometheus-community \
-https://prometheus-community.github.io/helm-charts
-
-helm repo update
-
-helm install prometheus prometheus-community/prometheus \
-  -n monitoring \
-  --create-namespace
+make prometheus-install
 ```
 
-Upgrade using project values:
+This installs the chart using the repo values file:
 
 ```bash
-helm upgrade prometheus prometheus-community/prometheus \
+helm upgrade --install prometheus prometheus-community/prometheus \
   -n monitoring \
+  --create-namespace \
   -f k8s/base/monitoring/prometheus/values.yaml
 ```
 
@@ -142,12 +146,21 @@ Verify:
 kubectl get pods -n monitoring
 ```
 
+If the chart is already installed, the upgrade command will keep it aligned with the project configuration.
 ---
 
 # Deploy Application
 
+Use the project overlay directly:
+
 ```bash
 kubectl apply -k k8s/overlays/local
+```
+
+Or via the Makefile helper:
+
+```bash
+make k8s-up
 ```
 
 Verify:
@@ -160,6 +173,7 @@ kubectl get gateway -n devops-platform
 
 All pods should be Running.
 
+The repo also includes Argo CD ApplicationSet automation under `argocd/applicationsets/` for GitOps-driven sync.
 ---
 
 # Access Frontend
@@ -177,7 +191,9 @@ http://localhost:8080
 
 ---
 
-# Prometheus
+# Observability
+
+## Prometheus
 
 Port-forward:
 
@@ -201,6 +217,23 @@ Expected targets:
 - user-service
 - task-service
 - notification-service
+
+## Grafana
+
+```bash
+kubectl port-forward svc/grafana 3001:80 -n monitoring
+```
+
+Open:
+
+http://localhost:3001
+
+Login with:
+
+- Username: admin
+- Password: admin123
+
+The dashboards configured in `k8s/base/monitoring/grafana/values.yaml` include the platform overview, API gateway overview, service overview, and Kubernetes cluster overview.
 
 ---
 
@@ -257,8 +290,11 @@ kubectl delete -k k8s/overlays/local
 - User Service (Node.js)
 - Task Service (Python gRPC)
 - Notification Service (Python gRPC)
-- PostgreSQL
+- Frontend (React/Vite)
 - Gateway API (Envoy)
 - Prometheus
+- Grafana
 - Metrics Server
 - Kubernetes
+- Argo CD + ApplicationSet + image updater
+- GitHub Actions CI/CD pipeline for GHCR publishing

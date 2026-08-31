@@ -50,3 +50,9 @@ dashboards:
 
     api-gateway:
       file: dashboards/api-gateway.json
+
+    service-overview:
+      file: dashboards/service-overview.json
+
+    kubernetes-cluster-overview:
+      file: dashboards/kubernetes-cluster-overview.json

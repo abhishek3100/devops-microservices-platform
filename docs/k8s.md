@@ -1,6 +1,6 @@
 # Kubernetes Deployment (Local)
 
-The platform is deployed to a local Kubernetes cluster using **Docker Desktop Kubernetes** and **Kustomize**.
+The platform is deployed to a local Kubernetes cluster using **Docker Desktop Kubernetes**, **Kustomize**, and **Gateway API**.
 
 ## Namespace
 
@@ -14,6 +14,13 @@ Deployment is managed through Kustomize overlays.
 
 ```bash
 kubectl apply -k k8s/overlays/local
+```
+
+For a quick project-level deployment command, the repo also provides:
+
+```bash
+make k8s-up
+make k8s-down
 ```
 
 ---
@@ -41,8 +48,10 @@ kubectl apply -k k8s/overlays/local
           (REST)                    (gRPC)                  (gRPC)
                                         │
                                         ▼
-                                   PostgreSQL
+                                 Prometheus / Grafana
 ```
+
+This project currently runs with in-memory app state and does not include a PostgreSQL deployment.
 
 ---
 
@@ -176,27 +185,24 @@ The base directory contains reusable manifests while overlays provide environmen
 # Current Features
 
 - Kubernetes Deployments
-- Services
-- ConfigMaps
-- Secrets
+- Services and networking rules
+- ConfigMaps and Secrets
 - Startup/Readiness/Liveness Probes
-- Gateway API
-- HTTPRoute
-- Envoy Gateway
-- Kustomize
-- REST + gRPC Microservices
-- Docker Images hosted on GitHub Container Registry (GHCR)
+- Gateway API and Envoy Gateway
+- Kustomize overlays for local and dev environments
+- REST + gRPC microservices
+- Docker image build and publishing via GitHub Actions
+- Prometheus scraping and Grafana dashboards
+- Argo CD ApplicationSet and image updater automation
 
 ---
 
 # Next Steps
 
-The platform will continue to evolve with:
+The platform continues to evolve with:
 
-- Prometheus
-- Grafana
-- Metrics Exporters
 - Horizontal Pod Autoscaler (HPA)
-- ArgoCD GitOps
-- Network Policies
-- Progressive Delivery (Canary / Blue-Green)
+- Additional observability exporters and alerting
+- Network Policies and pod security hardening
+- Progressive Delivery (canary / blue-green)
+- Database-backed persistence for long-term state
