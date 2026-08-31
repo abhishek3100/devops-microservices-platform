@@ -7,3 +7,4 @@ resources:
   - notification-service
   - frontend
   - config
+  - hooks
