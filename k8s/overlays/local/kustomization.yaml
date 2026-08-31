@@ -10,16 +10,16 @@ labels:
       environment: local
 images:
 - name: ghcr.io/abhishek3100/devops-microservices-platform/api-gateway
-  newTag: latest
+  newTag: 903b693
 
 - name: ghcr.io/abhishek3100/devops-microservices-platform/user-service
-  newTag: latest
+  newTag: 903b693
 
 - name: ghcr.io/abhishek3100/devops-microservices-platform/task-service
-  newTag: latest
+  newTag: 903b693
 
 - name: ghcr.io/abhishek3100/devops-microservices-platform/notification-service
-  newTag: latest
+  newTag: 903b693
 
 - name: ghcr.io/abhishek3100/devops-microservices-platform/frontend
-  newTag: latest
+  newTag: 903b693
