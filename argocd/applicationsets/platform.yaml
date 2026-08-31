@@ -37,13 +37,10 @@ spec:
       labels:
         environment: "{{env}}"
       annotations:
-        argocd-image-updater.argoproj.io/image-list: |
-          api-gateway=ghcr.io/abhishek3100/devops-microservices-platform/api-gateway
-          frontend=ghcr.io/abhishek3100/devops-microservices-platform/frontend
-          user-service=ghcr.io/abhishek3100/devops-microservices-platform/user-service
-          task-service=ghcr.io/abhishek3100/devops-microservices-platform/task-service
-          notification-service=ghcr.io/abhishek3100/devops-microservices-platform/notification-service
-        argocd-image-updater.argoproj.io/commonUpdateSettings: update-strategy=newest-build
+        argocd-image-updater.argoproj.io/image-list: "api-gateway=ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:latest,frontend=ghcr.io/abhishek3100/devops-microservices-platform/frontend:latest,user-service=ghcr.io/abhishek3100/devops-microservices-platform/user-service:latest,task-service=ghcr.io/abhishek3100/devops-microservices-platform/task-service:latest,notification-service=ghcr.io/abhishek3100/devops-microservices-platform/notification-service:latest"
+        argocd-image-updater.argoproj.io/commonUpdateSettings: |
+          update-strategy=newest-build
+          allow-tags=regexp:^[a-f0-9]{7}$
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main
     spec:
