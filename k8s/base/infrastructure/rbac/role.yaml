@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hook-runner
+  namespace: devops-platform
+rules:
+- apiGroups: [""]
+  resources:
+    - configmaps
+    - secrets
+    - services
+    - pods
+  verbs:
+    - get
+    - list

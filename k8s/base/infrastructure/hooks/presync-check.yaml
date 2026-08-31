@@ -2,7 +2,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: presync-check
-  namespace: devops-platform
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
@@ -10,6 +9,7 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      serviceAccountName: hook-runner
       containers:
         - name: check
           image: bitnami/kubectl:latest
@@ -17,4 +17,4 @@ spec:
             - sh
             - -c
             - |
-              kubectl get ns devops-platform
+              kubectl get configmap app-config -n devops-platform

@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hook-runner
+  namespace: devops-platform
+subjects:
+- kind: ServiceAccount
+  name: hook-runner
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: hook-runner
