@@ -17,19 +17,19 @@ spec:
             namespace: devops-platform
             path: k8s/overlays/local
   strategy:
-  type: RollingSync
-  rollingSync:
-    steps:
-      - matchExpressions:
-          - key: environment
-            operator: In
-            values:
-              - local
-      - matchExpressions:
-          - key: environment
-            operator: In
-            values:
-              - dev
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: environment
+              operator: In
+              values:
+                - local
+        - matchExpressions:
+            - key: environment
+              operator: In
+              values:
+                - dev
 
   template:
     metadata:
