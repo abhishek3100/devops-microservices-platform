@@ -1,6 +1,6 @@
 kustomize:
   images:
-  - ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:aa5559c
+  - ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:02f98ad
   - ghcr.io/abhishek3100/devops-microservices-platform/frontend:latest
   - ghcr.io/abhishek3100/devops-microservices-platform/user-service:57261a2
   - ghcr.io/abhishek3100/devops-microservices-platform/task-service:57261a2
