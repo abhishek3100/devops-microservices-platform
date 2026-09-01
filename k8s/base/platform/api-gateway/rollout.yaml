@@ -2,8 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: api-gateway
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   replicas: 1
   revisionHistoryLimit: 5
@@ -12,15 +10,15 @@ spec:
       app: api-gateway
   strategy:
     canary:
-    stableService: api-gateway-stable
-    canaryService: api-gateway-canary
-    steps:
-      - setWeight: 20
-      - pause: {}
-      - setWeight: 50
-      - pause:
-          duration: 30s
-      - setWeight: 100
+      stableService: api-gateway-stable
+      canaryService: api-gateway-canary
+      steps:
+        - setWeight: 20
+        - pause: {}
+        - setWeight: 50
+        - pause:
+            duration: 30s
+        - setWeight: 100
   template:
     metadata:
       labels:
