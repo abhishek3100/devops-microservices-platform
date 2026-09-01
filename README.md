@@ -1,225 +1,155 @@
 # DevOps Microservices Platform
 
-A production-grade DevOps project demonstrating end-to-end implementation of a microservices-based 3-tier architecture using modern DevOps practices.
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![gRPC](https://img.shields.io/badge/gRPC-1E90FF?style=for-the-badge&logo=grpc&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
+![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+
+A modern DevOps microservices platform that demonstrates containerization, service orchestration, API gateway patterns, gRPC-based internal communication, GitOps delivery, and observability in a realistic multi-service setup.
 
 ---
 
 ## 🚀 Project Overview
 
-This project simulates a real-world microservices system with:
+This repository implements a full-stack platform with:
 
-* API Gateway (REST)
-* User Service (REST)
-* Task Service (gRPC)
-* Notification Service (gRPC)
-* Shared contract using Protocol Buffers
+- Frontend application built with React + Vite
+- API Gateway built with Node.js and Express
+- User service using REST APIs
+- Task service using gRPC
+- Notification service using gRPC
+- Shared Protocol Buffers for service contracts
+- Dockerized deployment for local and cloud flows
+- Kubernetes manifests with overlays
+- GitOps-based deployment using ArgoCD
+- Monitoring with Prometheus and Grafana
 
-The system demonstrates **multi-protocol communication (REST + gRPC)**, service-to-service interaction, and clean architectural separation.
-
----
-
-## 🧱 Architecture
-
-### High-Level Flow
-
-Frontend → API Gateway → Backend Services
-
-* External communication: REST
-* Internal communication: gRPC
-
-### Service Interaction
-
-* API Gateway → User Service (REST)
-* API Gateway → Task Service (gRPC)
-* Task Service → Notification Service (gRPC)
-
-```
-                Internet
-                     │
-               Envoy Gateway
-                     │
-              API Gateway (Node)
-             ┌────────┴────────┐
-             │                 │
-      User Service      Task Service (gRPC)
-                               │
-                               ▼
-                   Notification Service (gRPC)
-
-                PostgreSQL Database
-```
+The project showcases multi-protocol communication using REST for external traffic and gRPC for internal service-to-service calls.
 
 ---
 
+## 🏗️ Architecture
 
-### Platform Components
+```text
+Client / Browser
+       │
+       ▼
+   Frontend (React + Vite)
+       │
+       ▼
+   API Gateway (Node.js)
+       ├──────────────► User Service (REST)
+       └──────────────► Task Service (gRPC)
+                             │
+                             ▼
+                     Notification Service (gRPC)
+```
 
-- Kubernetes
-- Gateway API (Envoy)
-- Docker
-- Prometheus
-- Metrics Server
-- GitHub Actions
-- Kustomize
-- Helm
+### Service interactions
+
+- API Gateway → User Service: REST
+- API Gateway → Task Service: gRPC
+- Task Service → Notification Service: gRPC
+- Shared contracts are defined under the `proto/` directory
 
 ---
 
-## 📂 Repository Structure
+## 🧩 Repository Structure
 
-```
+```text
 devops-microservices-platform/
-│
+├── .github/workflows/       # CI/CD and GHCR publishing
+├── argocd/                  # ArgoCD application and appset configs
+├── docs/                    # Project documentation
+├── frontend/                # React frontend
+├── infra/                   # Docker Compose and infrastructure helpers
+├── k8s/                     # Kubernetes manifests and overlays
+├── proto/                   # Shared .proto contract definitions
 ├── services/
-│   ├── api-gateway/
-│   ├── user-service/
-│   ├── task-service/
-│   └── notification-service/
-│
-├── proto/                 # Shared gRPC contracts
-├── frontend/              # React/Vite frontend
-├── infra/compose/         # Docker Compose deployment
-├── k8s/                   # Kubernetes manifests and overlays
-├── terraform/             # Terraform infrastructure modules
-├── .github/workflows/     # CI and GHCR publishing
-│
-├── README.md
-└── Makefile
+│   ├── api-gateway/         # Node.js gateway
+│   ├── user-service/        # Node.js REST service
+│   ├── task-service/        # Python gRPC service
+│   └── notification-service/# Python gRPC service
+├── terraform/               # Terraform modules
+├── tests/                   # Load / validation tests
+├── Makefile                 # Local orchestration commands
+├── README.md                # Project overview
+├── .gitignore
+└── ...
 ```
 
 ---
 
-## ⚙️ Tech Stack
+## 🛠️ Tech Stack
 
-| Layer                | Technology        |
-| -------------------- | ----------------- |
-| API Gateway          | Node.js (Express) |
-| User Service         | Node.js           |
-| Task Service         | Python (gRPC)     |
-| Notification Service | Python (gRPC)     |
-| Communication        | REST + gRPC       |
-| Contracts            | Protocol Buffers  |
-
----
-
-## 🔌 API Endpoints
-
-### User Service (via API Gateway)
-
-* `POST /api/users/register`
-* `POST /api/users/login`
-* `GET /api/users/profile` (Protected)
+| Area | Technology |
+| --- | --- |
+| Frontend | React, Vite |
+| API Gateway | Node.js, Express |
+| User Service | Node.js |
+| Task Services | Python, gRPC |
+| Contracts | Protocol Buffers |
+| Containers | Docker |
+| Orchestration | Kubernetes, Kustomize |
+| GitOps | ArgoCD |
+| Monitoring | Prometheus, Grafana |
+| Infra as Code | Terraform |
+| CI/CD | GitHub Actions |
+| Local Compose | Docker Compose |
 
 ---
 
-### Task Service (via API Gateway)
+## 🔐 Current Features
 
-* `POST /api/tasks` (Protected)
-* `GET /api/tasks` (Protected)
-* `GET /health`
-
----
-
-## 🔐 Authentication
-
-* JWT-based authentication
-* Token issued by User Service
-* Verified at API Gateway
+- JWT-based authentication flow
+- REST endpoint exposure through the API gateway
+- gRPC service-to-service communication
+- Health-check based service interaction
+- Containerized services for local and cloud deployment
+- GitOps delivery pipelines with ArgoCD
+- Metrics and dashboard observability
+- Multi-environment Kubernetes overlays
 
 ---
 
 ## 🔄 Example Flow
 
-### Create Task
+### Create a task
 
-1. User logs in → receives JWT
-2. Client calls API Gateway with token
-3. API Gateway validates JWT
-4. Gateway calls Task Service via gRPC
-5. Task Service:
-
-   * Creates task (status = PENDING)
-   * Calls Notification Service (gRPC)
-6. Notification Service logs message
+1. User logs in and receives a JWT.
+2. Client sends the token through the API Gateway.
+3. Gateway validates the token.
+4. Task is created through the task service over gRPC.
+5. Task service triggers a notification via gRPC.
+6. Notification service handles the event or message delivery.
 
 ---
 
-## 🧠 Key Concepts Demonstrated
+## 📡 API Endpoints
 
-* Microservices architecture
-* API Gateway pattern
-* REST ↔ gRPC bridging
-* Service-to-service communication
-* Contract-first design using `.proto`
-* Layered service structure (controller, service, handler)
+### User service routes
 
----
+- `POST /api/users/register`
+- `POST /api/users/login`
+- `GET /api/users/profile` (protected)
 
-## ⚠️ Current Limitations (Intentional)
+### Task service routes
 
-* In-memory data storage (no persistence yet)
-* No retries or circuit breaking
-* No async messaging (planned)
+- `POST /api/tasks` (protected)
+- `GET /api/tasks` (protected)
+- `GET /health`
 
 ---
 
-## 🗺️ Roadmap
-
-## Project Status
-
-### ✅ Phase 1 — Microservices Architecture
-- [x] Frontend
-- [x] API Gateway
-- [x] User Service (REST)
-- [x] Task Service (gRPC)
-- [x] Notification Service (gRPC)
-
-### ✅ Phase 2 — Containerization
-- [x] Multi-stage Dockerfiles
-- [x] Docker Compose
-- [x] Non-root containers
-
-### ✅ Phase 3 — CI
-- [x] GitHub Actions
-- [x] Path-based builds
-- [x] GHCR image publishing
-
-### ✅ Phase 4 — Kubernetes
-- [x] Kustomize
-- [x] ConfigMaps & Secrets
-- [x] Health Probes
-- [x] Gateway API
-- [x] Envoy Gateway
-
-### 🚧 Phase 5 — Observability
-- [ ] Prometheus
-- [ ] Grafana
-- [ ] Metrics
-
-### 🚧 Phase 6 — Autoscaling
-- [ ] HPA
-- [ ] Load Testing
-
-### 🚧 Phase 7 — GitOps
-- [ ] ArgoCD
-- [ ] Automated Deployments
-
-### 🚧 Phase 8 — Security
-- [ ] Network Policies
-- [ ] RBAC
-- [ ] Pod Security
----
-
-## 🧠 Design Decisions
-
-* gRPC used for internal communication (performance + contracts)
-* REST used for external APIs (simplicity)
-* Shared proto contracts at root for consistency
-* Monorepo for faster development iteration
-
----
-
-## 🧪 How to Run Locally
+## 🧪 Run Locally
 
 ### Docker Compose
 
@@ -227,67 +157,101 @@ devops-microservices-platform/
 make up
 ```
 
-The frontend is available at `http://localhost:8080` and the API gateway at
-`http://localhost:3000`.
+Then access:
+
+- Frontend: `http://localhost:8080`
+- API Gateway: `http://localhost:3000`
 
 ### Kubernetes
-
-See [k8s/README.md](k8s/README.md) for local cluster and Envoy Gateway setup.
 
 ```bash
 kubectl apply -k k8s/overlays/local
 ```
 
-### Manual Services (Phase 1)
-
-### Start Services
+### Manual service startup
 
 ```bash
-# Terminal 1
+# User service
 cd services/user-service
 node src/index.js
 
-# Terminal 2
+# Task service
 cd services/task-service
 python -m src.server
 
-# Terminal 3
+# Notification service
 cd services/notification-service
 python -m src.server
 
-# Terminal 4
+# API gateway
 cd services/api-gateway
 node src/index.js
 ```
 
 ---
 
-### Test APIs
+## 🧪 Example API Calls
 
-#### Register
+### Register user
 
 ```bash
 curl -X POST http://localhost:3000/api/users/register \
--H "Content-Type: application/json" \
--d '{"email":"test@test.com","password":"123456"}'
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"123456"}'
 ```
 
-#### Login
+### Login user
 
 ```bash
 curl -X POST http://localhost:3000/api/users/login \
--H "Content-Type: application/json" \
--d '{"email":"test@test.com","password":"123456"}'
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"123456"}'
 ```
 
-#### Create Task
+### Create task
 
 ```bash
 curl -X POST http://localhost:3000/api/tasks \
--H "Authorization: Bearer <TOKEN>" \
--H "Content-Type: application/json" \
--d '{"title":"Learn microservices"}'
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Learn microservices"}'
 ```
+
+---
+
+## 🚦 Project Status
+
+### ✅ Completed
+
+- Frontend application
+- API gateway
+- User service
+- Task service
+- Notification service
+- Dockerized services
+- GitHub Actions workflow
+- Kubernetes overlays
+- ArgoCD app set
+- Prometheus and Grafana setup
+- Terraform modules
+
+### 🚧 Planned
+
+- HPA and autoscaling policies
+- Network policies
+- Stronger RBAC and pod security
+- Persistent database integration
+- Event-driven async messaging
+
+---
+
+## 🧠 Design Decisions
+
+- REST is used for public-facing APIs for simplicity.
+- gRPC is used internally for high-performance service communication.
+- Shared `.proto` files ensure contract-driven development.
+- A monorepo layout keeps service ownership and deployment simple.
+- GitOps through ArgoCD keeps the platform easy to manage across environments.
 
 ---
 
@@ -295,4 +259,3 @@ curl -X POST http://localhost:3000/api/tasks \
 
 Abhishek Kumar || DevOps Engineer
 
----
