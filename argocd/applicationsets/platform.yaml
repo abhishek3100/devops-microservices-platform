@@ -37,7 +37,12 @@ spec:
       labels:
         environment: "{{env}}"
       annotations:
-        argocd-image-updater.argoproj.io/image-list: "api-gateway=ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:latest,frontend=ghcr.io/abhishek3100/devops-microservices-platform/frontend:latest,user-service=ghcr.io/abhishek3100/devops-microservices-platform/user-service:latest,task-service=ghcr.io/abhishek3100/devops-microservices-platform/task-service:latest,notification-service=ghcr.io/abhishek3100/devops-microservices-platform/notification-service:latest"
+        argocd-image-updater.argoproj.io/image-list: |
+          api-gateway=ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:latest,
+          frontend=ghcr.io/abhishek3100/devops-microservices-platform/frontend:latest,
+          user-service=ghcr.io/abhishek3100/devops-microservices-platform/user-service:latest,
+          task-service=ghcr.io/abhishek3100/devops-microservices-platform/task-service:latest,
+          notification-service=ghcr.io/abhishek3100/devops-microservices-platform/notification-service:latest
         argocd-image-updater.argoproj.io/api-gateway.update-strategy: newest-build
         argocd-image-updater.argoproj.io/frontend.update-strategy: newest-build
         argocd-image-updater.argoproj.io/user-service.update-strategy: newest-build
