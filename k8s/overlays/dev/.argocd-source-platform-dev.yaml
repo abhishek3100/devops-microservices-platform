@@ -1,7 +1,7 @@
 kustomize:
   images:
-  - ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:latest
-  - ghcr.io/abhishek3100/devops-microservices-platform/frontend:903b693
-  - ghcr.io/abhishek3100/devops-microservices-platform/user-service:latest
-  - ghcr.io/abhishek3100/devops-microservices-platform/task-service:latest
-  - ghcr.io/abhishek3100/devops-microservices-platform/notification-service:latest
+  - ghcr.io/abhishek3100/devops-microservices-platform/api-gateway:57261a2
+  - ghcr.io/abhishek3100/devops-microservices-platform/frontend:latest
+  - ghcr.io/abhishek3100/devops-microservices-platform/user-service:57261a2
+  - ghcr.io/abhishek3100/devops-microservices-platform/task-service:57261a2
+  - ghcr.io/abhishek3100/devops-microservices-platform/notification-service:57261a2
