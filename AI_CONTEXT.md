@@ -84,17 +84,16 @@ Applications are deployed using ApplicationSets.
 
 App of Apps pattern.
 
-root
- ├── infrastructure
- ├── monitoring
- └── platform (ApplicationSet)
+    root
+    ├── infrastructure
+    ├── monitoring
+    └── platform (ApplicationSet)
 
 Progressive Sync order
 
-local
-↓
-
-dev
+    local
+     ↓
+    dev
 
 ---
 
@@ -171,35 +170,21 @@ Image updater writes SHA versions back into Git.
 
 # CI/CD
 
-Push
-
-↓
-
-GitHub Actions
-
-↓
-
-Build Images
-
-↓
-
-Push GHCR
-
-↓
-
-Image Updater
-
-↓
-
-Commit updated image tags
-
-↓
-
-ArgoCD Sync
-
-↓
-
-Deploy
+    Push
+        ↓
+    GitHub Actions
+        ↓
+    Build Images
+        ↓
+    Push GHCR
+        ↓
+    Image Updater
+        ↓
+    Commit updated image tags
+        ↓
+    ArgoCD Sync
+        ↓
+    Deploy
 
 ---
 

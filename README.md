@@ -240,8 +240,6 @@ curl -X POST http://localhost:3000/api/tasks \
 - HPA and autoscaling policies
 - Network policies
 - Stronger RBAC and pod security
-- Persistent database integration
-- Event-driven async messaging
 
 ---
 
@@ -257,5 +255,5 @@ curl -X POST http://localhost:3000/api/tasks \
 
 ## 👨‍💻 Author
 
-Abhishek Kumar || DevOps Engineer
+Abhishek Kumar || Senior DevOps Engineer
 
