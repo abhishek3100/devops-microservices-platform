@@ -3,12 +3,13 @@ name: DevOps Microservices CI
 on:
   push:
     branches: [ "main", "feature/**" ]
+    paths-ignore:
+      - "**/.argocd-source-*.yaml"
   pull_request:
     paths-ignore:
       - "**/.argocd-source-*.yaml"
   workflow_dispatch:
-  paths-ignore:
-      - "**/.argocd-source-*.yaml"
+  
 
 permissions:
   contents: read
