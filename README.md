@@ -4,7 +4,7 @@
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![gRPC](https://img.shields.io/badge/gRPC-1E90FF?style=for-the-badge&logo=grpc&logoColor=white)
+![gRPC](https://img.shields.io/badge/gRPC-1E90FF?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)
@@ -13,247 +13,437 @@
 ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 
-A modern DevOps microservices platform that demonstrates containerization, service orchestration, API gateway patterns, gRPC-based internal communication, GitOps delivery, and observability in a realistic multi-service setup.
+A production-inspired DevOps platform demonstrating modern software delivery using microservices, Kubernetes, GitOps, CI/CD, Infrastructure as Code, and observability.
 
 ---
 
-## 🚀 Project Overview
+# 🎯 Purpose
 
-This repository implements a full-stack platform with:
+This project was built as a hands-on learning and experimentation platform to implement production-inspired DevOps practices in a realistic microservices environment.
 
-- Frontend application built with React + Vite
-- API Gateway built with Node.js and Express
-- User service using REST APIs
-- Task service using gRPC
-- Notification service using gRPC
-- Shared Protocol Buffers for service contracts
-- Dockerized deployment for local and cloud flows
-- Kubernetes manifests with overlays
-- GitOps-based deployment using ArgoCD
-- Monitoring with Prometheus and Grafana
+The objective was not only to build a working application but also to design, deploy, automate, monitor, and operate it using modern cloud-native tooling.
 
-The project showcases multi-protocol communication using REST for external traffic and gRPC for internal service-to-service calls.
+Throughout the project, features were implemented incrementally while solving real operational challenges such as deployment ordering, GitOps workflows, image automation, RBAC, Kubernetes resource management, observability, and multi-environment deployments.
+
+> **This project serves as both a learning platform and a portfolio demonstrating practical DevOps and Platform Engineering concepts.**
 
 ---
 
-## 🏗️ Architecture
+# ⭐ Highlights
+
+- Microservices Architecture
+- REST + gRPC Communication
+- Docker Multi-stage Builds
+- GitHub Actions CI/CD
+- GitHub Container Registry (GHCR)
+- Kubernetes + Kustomize
+- GitOps using Argo CD
+- Argo CD ApplicationSets
+- Progressive Syncs
+- Sync Waves
+- PreSync & PostSync Hooks
+- Argo CD Image Updater
+- Gateway API + Envoy Gateway
+- Horizontal Pod Autoscaler (HPA)
+- Prometheus Monitoring
+- Grafana Dashboards
+- Loki Centralized Logging
+- Multi-environment Deployments
+- Infrastructure as Code using Terraform
+
+---
+
+# 🚀 Project Overview
+
+This repository implements a complete DevOps platform consisting of:
+
+- React + Vite frontend
+- Node.js API Gateway
+- User Service (REST)
+- Task Service (gRPC)
+- Notification Service (gRPC)
+- Shared Protocol Buffer contracts
+- Dockerized services
+- Kubernetes deployments
+- GitOps with Argo CD
+- Automated image updates
+- Observability stack
+- Infrastructure as Code
+
+The platform demonstrates how modern DevOps practices integrate software development with automated deployment and infrastructure management.
+
+---
+
+# 🚀 CI/CD & GitOps Pipeline
 
 ```text
-Client / Browser
-       │
-       ▼
-   Frontend (React + Vite)
-       │
-       ▼
-   API Gateway (Node.js)
-       ├──────────────► User Service (REST)
-       └──────────────► Task Service (gRPC)
-                             │
-                             ▼
-                     Notification Service (gRPC)
+Developer
+     │
+     ▼
+GitHub Repository
+     │
+     ▼
+GitHub Actions
+     │
+     ▼
+Build Docker Images
+     │
+     ▼
+Push Images to GHCR
+     │
+     ▼
+Argo CD Image Updater
+     │
+     ▼
+Updates Git Repository
+     │
+     ▼
+Argo CD
+     │
+     ▼
+Kubernetes Cluster
+     │
+     ▼
+Gateway API
+     │
+     ▼
+Microservices
 ```
-
-### Service interactions
-
-- API Gateway → User Service: REST
-- API Gateway → Task Service: gRPC
-- Task Service → Notification Service: gRPC
-- Shared contracts are defined under the `proto/` directory
 
 ---
 
-## 🧩 Repository Structure
+# 🏗️ Architecture
+
+```text
+                  Client / Browser
+                         │
+                         ▼
+                Frontend (React + Vite)
+                         │
+                         ▼
+                 API Gateway (Node.js)
+                    │             │
+                    │             ▼
+                    │      User Service (REST)
+                    │
+                    ▼
+              Task Service (gRPC)
+                    │
+                    ▼
+         Notification Service (gRPC)
+```
+
+---
+
+# 🔄 Service Communication
+
+| Source | Destination | Protocol |
+|----------|------------|----------|
+| Browser | API Gateway | HTTP |
+| API Gateway | User Service | REST |
+| API Gateway | Task Service | gRPC |
+| Task Service | Notification Service | gRPC |
+
+Shared contracts are maintained under the `proto/` directory.
+
+---
+
+# 📸 Screenshots
+
+
+## GitHub Actions Pipeline
+
+![GitHub Actions](docs/screenshots/github-actions.png)
+
+---
+
+## Argo CD Applications
+
+![ArgoCD](docs/screenshots/argocd-dashboard.png)
+
+---
+
+## Grafana Dashboard
+
+![Grafana](docs/screenshots/grafana-dashboard.png)
+
+---
+
+## Prometheus Targets
+
+![Prometheus](docs/screenshots/prometheus-targets.png)
+
+---
+
+## Loki Logs
+
+![Loki](docs/screenshots/loki-logs.png)
+
+---
+
+## Automated Image Updater
+
+Argo CD Image Updater automatically commits updated image tags back to Git.
+
+![Image Updater](docs/screenshots/image-updater-commit.png)
+---
+
+# 🧩 Repository Structure
 
 ```text
 devops-microservices-platform/
-├── .github/workflows/       # CI/CD and GHCR publishing
-├── argocd/                  # ArgoCD application and appset configs
-├── docs/                    # Project documentation
-├── frontend/                # React frontend
-├── infra/                   # Docker Compose and infrastructure helpers
-├── k8s/                     # Kubernetes manifests and overlays
-├── proto/                   # Shared .proto contract definitions
+
+├── .github/workflows/
+├── argocd/
+├── docs/
+├── frontend/
+├── infra/
+├── k8s/
+├── proto/
 ├── services/
-│   ├── api-gateway/         # Node.js gateway
-│   ├── user-service/        # Node.js REST service
-│   ├── task-service/        # Python gRPC service
-│   └── notification-service/# Python gRPC service
-├── terraform/               # Terraform modules
-├── tests/                   # Load / validation tests
-├── Makefile                 # Local orchestration commands
-├── README.md                # Project overview
-├── .gitignore
+│   ├── api-gateway/
+│   ├── user-service/
+│   ├── task-service/
+│   └── notification-service/
+├── terraform/
+├── tests/
+├── Makefile
+├── README.md
 └── ...
 ```
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
 | Area | Technology |
-| --- | --- |
+|------|------------|
 | Frontend | React, Vite |
-| API Gateway | Node.js, Express |
-| User Service | Node.js |
-| Task Services | Python, gRPC |
+| Backend | Node.js, Express |
+| Microservices | Python |
+| Communication | REST, gRPC |
 | Contracts | Protocol Buffers |
 | Containers | Docker |
-| Orchestration | Kubernetes, Kustomize |
-| GitOps | ArgoCD |
-| Monitoring | Prometheus, Grafana |
-| Infra as Code | Terraform |
+| Orchestration | Kubernetes |
+| Configuration | Kustomize |
+| GitOps | Argo CD |
+| API Gateway | Envoy Gateway |
+| Monitoring | Prometheus |
+| Dashboards | Grafana |
+| Logging | Loki |
+| Infrastructure | Terraform |
 | CI/CD | GitHub Actions |
-| Local Compose | Docker Compose |
+| Registry | GitHub Container Registry |
 
 ---
 
-## 🔐 Current Features
+# 🚀 Production Features Implemented
 
-- JWT-based authentication flow
-- REST endpoint exposure through the API gateway
-- gRPC service-to-service communication
-- Health-check based service interaction
-- Containerized services for local and cloud deployment
-- GitOps delivery pipelines with ArgoCD
-- Metrics and dashboard observability
-- Multi-environment Kubernetes overlays
+### CI/CD
+
+- GitHub Actions pipelines
+- Automated Docker image builds
+- GHCR image publishing
+- SHA-based image versioning
+- Latest image tagging
+
+### Kubernetes
+
+- Multi-service deployment
+- Namespaces
+- ConfigMaps
+- Secrets
+- Services
+- Gateway API
+- Envoy Gateway
+- Resource Requests & Limits
+- Health Probes
+- Readiness Probes
+- Liveness Probes
+- Horizontal Pod Autoscaler (HPA)
+
+### GitOps
+
+- Argo CD
+- App of Apps Pattern
+- ApplicationSets
+- Progressive Syncs
+- Sync Waves
+- PreSync Hooks
+- PostSync Hooks
+- Automated Image Updates
+- Git Write-back
+
+### Observability
+
+- Prometheus
+- Grafana
+- Loki
+- Promtail
+- Metrics Collection
+- Log Aggregation
+
+### Infrastructure
+
+- Terraform modules
+- Docker Compose
+- Kustomize Base/Overlay structure
 
 ---
 
-## 🔄 Example Flow
+# 🔐 Current Features
 
-### Create a task
-
-1. User logs in and receives a JWT.
-2. Client sends the token through the API Gateway.
-3. Gateway validates the token.
-4. Task is created through the task service over gRPC.
-5. Task service triggers a notification via gRPC.
-6. Notification service handles the event or message delivery.
-
----
-
-## 📡 API Endpoints
-
-### User service routes
-
-- `POST /api/users/register`
-- `POST /api/users/login`
-- `GET /api/users/profile` (protected)
-
-### Task service routes
-
-- `POST /api/tasks` (protected)
-- `GET /api/tasks` (protected)
-- `GET /health`
+- JWT Authentication
+- REST APIs
+- gRPC Service Communication
+- Health Checks
+- GitOps Deployment
+- Multi-environment Deployments
+- Automated Image Updates
+- Monitoring Dashboards
+- Centralized Logging
 
 ---
 
-## 🧪 Run Locally
+# 🔄 Example Flow
 
-### Docker Compose
+## Create Task
+
+1. User logs in
+2. JWT token generated
+3. Request reaches API Gateway
+4. Gateway validates token
+5. Task Service creates task via gRPC
+6. Notification Service receives gRPC request
+7. Notification processed
+
+---
+
+# 📡 API Endpoints
+
+## User Service
+
+```
+POST /api/users/register
+POST /api/users/login
+GET  /api/users/profile
+```
+
+## Task Service
+
+```
+POST /api/tasks
+GET  /api/tasks
+GET  /health
+```
+
+---
+
+# 🧪 Run Locally
+
+## Docker Compose
 
 ```bash
 make up
 ```
 
-Then access:
+Frontend
 
-- Frontend: `http://localhost:8080`
-- API Gateway: `http://localhost:3000`
+```
+http://localhost:8080
+```
 
-### Kubernetes
+Gateway
+
+```
+http://localhost:3000
+```
+
+---
+
+## Kubernetes
 
 ```bash
 kubectl apply -k k8s/overlays/local
 ```
 
-### Manual service startup
+---
 
-```bash
-# User service
-cd services/user-service
-node src/index.js
+# 💡 Design Decisions
 
-# Task service
-cd services/task-service
-python -m src.server
-
-# Notification service
-cd services/notification-service
-python -m src.server
-
-# API gateway
-cd services/api-gateway
-node src/index.js
-```
+- REST is used for external APIs.
+- gRPC is used for internal service communication.
+- Shared `.proto` files provide contract-first development.
+- GitOps ensures deployments remain declarative.
+- Kustomize separates reusable base resources from environment-specific overlays.
+- Argo CD automates reconciliation between Git and the cluster.
+- Image Updater automatically promotes container image versions via Git commits.
 
 ---
 
-## 🧪 Example API Calls
+# 📚 Key Learnings
 
-### Register user
+This project provided practical experience with:
 
-```bash
-curl -X POST http://localhost:3000/api/users/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"123456"}'
-```
-
-### Login user
-
-```bash
-curl -X POST http://localhost:3000/api/users/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"123456"}'
-```
-
-### Create task
-
-```bash
-curl -X POST http://localhost:3000/api/tasks \
-  -H "Authorization: Bearer <TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Learn microservices"}'
-```
+- Kubernetes architecture
+- GitOps workflows
+- Argo CD
+- ApplicationSets
+- Progressive Syncs
+- Sync Waves
+- Argo CD Hooks
+- Image Automation
+- Multi-environment deployments
+- Gateway API
+- Envoy Gateway
+- Observability
+- Docker image lifecycle
+- Kubernetes RBAC
+- Horizontal Pod Autoscaling
+- CI/CD design
+- Infrastructure as Code
 
 ---
 
-## 🚦 Project Status
+# 💡 Challenges Solved
 
-### ✅ Completed
+Some implementation challenges addressed during development:
 
-- Frontend application
-- API gateway
-- User service
-- Task service
-- Notification service
-- Dockerized services
-- GitHub Actions workflow
-- Kubernetes overlays
-- ArgoCD app set
-- Prometheus and Grafana setup
-- Terraform modules
-
-### 🚧 Planned
-
-- HPA and autoscaling policies
-- Network policies
-- Stronger RBAC and pod security
+- Designing GitOps repository structure
+- Managing deployment ordering with Sync Waves
+- Implementing ApplicationSets
+- Configuring Hook RBAC
+- Automating image updates through Git commits
+- Separating infrastructure and application resources
+- Building reusable Kustomize overlays
+- Managing multi-environment deployments
+- Troubleshooting Kubernetes reconciliation issues
 
 ---
 
-## 🧠 Design Decisions
+# 🚦 Project Status
 
-- REST is used for public-facing APIs for simplicity.
-- gRPC is used internally for high-performance service communication.
-- Shared `.proto` files ensure contract-driven development.
-- A monorepo layout keeps service ownership and deployment simple.
-- GitOps through ArgoCD keeps the platform easy to manage across environments.
+## ✅ Completed
+
+This project is feature complete and serves as a production-inspired DevOps portfolio project.
+
+### Future Enhancements
+
+- Cilium Networking
+- Network Policies
+- External Secrets Operator
+- Kyverno Policies
+- Argo Rollouts
+- Service Mesh (Istio)
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
-Abhishek Kumar || Senior DevOps Engineer
+**Abhishek Kumar**
 
+DevOps | Cloud | Kubernetes | Platform Engineering
+
+GitHub: https://github.com/abhishek3100
+
+LinkedIn: https://linkedin.com/in/abhishekbgs
